@@ -8,27 +8,40 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     iterations = []  # Store iteration details
     xn = sp.Matrix(x0)
     
+    step = 0
     while True:
+        f_x = f_expr.subs(zip(vars, xn)).evalf()
         grad_values = sp.Matrix([g.subs(zip(vars, xn)).evalf() for g in gradients])
         hessian_values = hessian.subs(zip(vars, xn)).evalf()
         
+        st.write(f"Step {step}:")
+        st.write(f"  1. Current x = {xn}")
+        st.write(f"  2. Function value f(x) = {f_x}")
+        st.write(f"  3. Gradient = {grad_values}")
+        st.write(f"  4. Hessian Matrix = {hessian_values}")
+        
+        iterations.append((step, xn, f_x, grad_values, hessian_values))
+        
         if grad_values.norm() < tol:
+            st.write("  5. Gradient norm is below tolerance, stopping.")
             break  # Stop if gradient is small enough
         
         if hessian_values.det() == 0:
             st.error("Hessian matrix is singular, Newton's method fails.")
+            st.write("  6. Hessian matrix is singular, method fails.")
             return []
         
         xn_new = xn - hessian_values.inv() * grad_values
-        
-        iterations.append((xn, grad_values, hessian_values, xn_new))
+        st.write(f"  6. Next x = {xn_new}")
         
         if (xn_new - xn).norm() < tol:
+            xn = xn_new
             break  # Stop if change is small enough
         
         xn = xn_new
+        step += 1
     
-    return iterations, xn_new
+    return iterations, xn
 
 # Streamlit UI
 st.title("Newton's Method for Multivariable Minima")
@@ -49,8 +62,13 @@ if st.button("Find Minima"):
         
         if steps:
             st.subheader("Iteration Steps")
-            for i, (xn, grad_values, hessian_values, xn_new) in enumerate(steps):
-                st.write(f"Step {i+1}: x = {xn}, Gradient = {grad_values}, Hessian = {hessian_values}, Next x = {xn_new}")
+            for step, xn, f_x, grad_values, hessian_values in steps:
+                st.write(f"Step {step}:")
+                st.write(f"  1. x = {xn}")
+                st.write(f"  2. f(x) = {f_x}")
+                st.write(f"  3. Gradient = {grad_values}")
+                st.write(f"  4. Hessian = {hessian_values}")
+                st.write("-----------------------------------")
             
             st.success(f"Estimated Minima at x = {minima}")
     except Exception as e:
