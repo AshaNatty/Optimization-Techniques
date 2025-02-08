@@ -12,7 +12,7 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     while True:
         f_x = round(f_expr.subs(zip(vars, xn)).evalf(), 4)
         grad_values = sp.Matrix([round(g.subs(zip(vars, xn)).evalf(), 4) for g in gradients])
-        hessian_values = sp.Matrix([[round(h.subs(zip(vars, xn)).evalf(), 4) for h in row] for row in hessian])
+        hessian_values = hessian.subs(zip(vars, xn)).evalf()
         
         st.write(f"Step {step}:")
         st.write(f"  1. Current x = {xn.applyfunc(lambda v: round(v, 4))}")
@@ -26,7 +26,7 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
             st.write("  5. Gradient norm is below tolerance, stopping.")
             break  # Stop if gradient is small enough
         
-        if hessian_values.det() == 0:
+        if hessian_values.det().evalf() == 0:
             st.error("Hessian matrix is singular, Newton's method fails.")
             st.write("  6. Hessian matrix is singular, method fails.")
             return []
