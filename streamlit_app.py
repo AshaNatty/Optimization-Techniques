@@ -9,6 +9,8 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     xn = sp.Matrix(x0)
     
     st.write(f"Function: f({', '.join([str(v) for v in vars])}) = {f_expr}")
+    st.write(f"Gradient Formula: ∇f = [{', '.join([str(sp.diff(f_expr, var)) for var in vars])}]")
+    st.write(f"Hessian Matrix Formula: H = {hessian}")
     st.write(f"Gradient: {sp.Matrix(gradients)}")
     st.write(f"Hessian Matrix: {hessian}")
     
