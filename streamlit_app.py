@@ -9,14 +9,14 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     xn = sp.Matrix(x0)
     
     st.write(f"Function: f({', '.join([str(v) for v in vars])}) = {f_expr}")
-    st.write(f"Gradient: {[g for g in gradients]}")
+    st.write(f"Gradient: {sp.Matrix(gradients)}")
     st.write(f"Hessian Matrix: {hessian}")
     
     step = 0
     while True:
         f_x = round(f_expr.subs(zip(vars, xn)).evalf(), 4)
         grad_values = sp.Matrix([round(g.subs(zip(vars, xn)).evalf(), 4) for g in gradients])
-        hessian_values = sp.Matrix([[round(h.subs(zip(vars, xn)).evalf(), 4) for h in row] for row in hessian])
+        hessian_values = sp.Matrix([[round(h.subs(zip(vars, xn)).evalf(), 4) for h in row] for row in hessian.tolist()])
         
         st.write(f"Step {step}:")
         st.write(f"  1. Current x = {xn.applyfunc(lambda v: round(v, 4))}")
