@@ -9,18 +9,18 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     xn = sp.Matrix(x0)
     
     st.write(f"Function: f({', '.join([str(v) for v in vars])}) = {f_expr}")
-    st.write("1️⃣ The gradient (∇f) represents the first derivatives with respect to the variables:")
+    st.write("1️ The gradient (∇f) represents the first derivatives with respect to the variables:")
     st.write(f"∇f = [{', '.join([f'∂f/∂{var}' for var in vars])}]")
     st.write(f"Gradient Formula: {sp.Matrix(gradients)}")
     
     st.write("2️⃣ Hessian Matrix:")
     st.write("The Hessian matrix (H) represents the second derivatives of f(x,y):")
     st.latex(r"""
-    H = \begin{bmatrix}
-    \frac{\partial^2 f}{\partial x^2} & \frac{\partial^2 f}{\partial x \partial y} \\
-    \frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2}
-    \end{bmatrix}
-    """)
+H = \begin{bmatrix}
+\frac{\partial^2 f}{\partial x^2} & \frac{\partial^2 f}{\partial x \partial y} \\
+\frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2}
+\end{bmatrix}
+""")
     st.write(f"Hessian Matrix Formula: H = {hessian}")
     
     step = 0
@@ -41,14 +41,20 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
             st.write("  5. Gradient norm is below tolerance, stopping.")
             break  # Stop if gradient is small enough
         
-        if hessian_values.det() == 0:
-            st.error("Hessian matrix is singular, Newton's method fails.")
-            st.write("  6. Hessian matrix is singular, method fails.")
-            return []
+        st.write("  6. Substituting into the formula:")
+        st.write(f"     x_new = x - H^(-1) * Gradient")
+        st.write(f"     x_new = {xn.applyfunc(lambda v: round(v, 4))} - H^(-1) * {grad_values.applyfunc(lambda v: round(v, 4))}")
         
-        st.write("  6. Formula: x_new = x - H^(-1) * Gradient")
-        xn_new = xn - hessian_values.inv() * grad_values
-        st.write(f"  7. Next x = {xn_new.applyfunc(lambda v: round(v, 4))}")
+        st.write("  7. Calculate H^(-1):")
+        hessian_inv = hessian_values.inv()
+        st.write(f"     H^(-1) = {hessian_inv.applyfunc(lambda v: round(v, 4))}")
+        
+        st.write("  8. Calculate H^(-1) * Gradient:")
+        hessian_inv_grad = hessian_inv * grad_values
+        st.write(f"     H^(-1) * Gradient = {hessian_inv_grad.applyfunc(lambda v: round(v, 4))}")
+        
+        xn_new = xn - hessian_inv_grad
+        st.write(f"  9. Next x = {xn_new.applyfunc(lambda v: round(v, 4))}")
         
         if (xn_new - xn).norm() < tol:
             xn = xn_new
