@@ -9,14 +9,14 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     xn = sp.Matrix(x0)
     
     st.write(f"Function: f({', '.join([str(v) for v in vars])}) = {f_expr}")
-    st.write("1️ The gradient (∇f) represents the first derivatives with respect to the variables:")
+    st.write("1️⃣ The gradient (∇f) represents the first derivatives with respect to the variables:")
     st.write(f"∇f = [{', '.join([f'∂f/∂{var}' for var in vars])}]")
     st.write(f"Gradient Formula: {sp.Matrix(gradients)}")
     
     st.write("2️⃣ Hessian Matrix:")
     st.write("The Hessian matrix (H) represents the second derivatives of f(x,y):")
-    st.write("H = [ ∂²f/∂x²   ∂²f/∂x∂y "]
-              "[ ∂²f/∂y∂x   ∂²f/∂y² ]")
+    st.write("H = [ ∂²f/∂x²   ∂²f/∂x∂y ")
+    st.write("      ∂²f/∂y∂x   ∂²f/∂y² ]")
     st.write(f"Hessian Matrix Formula: H = {hessian}")
     
     step = 0
