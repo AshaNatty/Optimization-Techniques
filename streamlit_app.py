@@ -35,8 +35,9 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
             st.write("  6. Hessian matrix is singular, method fails.")
             return []
         
+        st.write("  6. Formula: x_new = x - H^(-1) * Gradient")
         xn_new = xn - hessian_values.inv() * grad_values
-        st.write(f"  6. Next x = {xn_new.applyfunc(lambda v: round(v, 4))}")
+        st.write(f"  7. Next x = {xn_new.applyfunc(lambda v: round(v, 4))}")
         
         if (xn_new - xn).norm() < tol:
             xn = xn_new
@@ -72,6 +73,7 @@ if st.button("Find Minima"):
                 st.write(f"  2. f(x) = {f_x}")
                 st.write(f"  3. Gradient = {grad_values}")
                 st.write(f"  4. Hessian = {hessian_values}")
+                st.write("  5. Formula: x_new = x - H^(-1) * Gradient")
                 st.write("-----------------------------------")
             
             st.success(f"Estimated Minima at x = {minima.applyfunc(lambda v: round(v, 4))}")
