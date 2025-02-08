@@ -10,12 +10,12 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     
     step = 0
     while True:
-        f_x = f_expr.subs(zip(vars, xn)).evalf()
-        grad_values = sp.Matrix([g.subs(zip(vars, xn)).evalf() for g in gradients])
-        hessian_values = hessian.subs(zip(vars, xn)).evalf()
+        f_x = round(f_expr.subs(zip(vars, xn)).evalf(), 4)
+        grad_values = sp.Matrix([round(g.subs(zip(vars, xn)).evalf(), 4) for g in gradients])
+        hessian_values = sp.Matrix([[round(h.subs(zip(vars, xn)).evalf(), 4) for h in row] for row in hessian])
         
         st.write(f"Step {step}:")
-        st.write(f"  1. Current x = {xn}")
+        st.write(f"  1. Current x = {xn.applyfunc(lambda v: round(v, 4))}")
         st.write(f"  2. Function value f(x) = {f_x}")
         st.write(f"  3. Gradient = {grad_values}")
         st.write(f"  4. Hessian Matrix = {hessian_values}")
@@ -32,7 +32,7 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
             return []
         
         xn_new = xn - hessian_values.inv() * grad_values
-        st.write(f"  6. Next x = {xn_new}")
+        st.write(f"  6. Next x = {xn_new.applyfunc(lambda v: round(v, 4))}")
         
         if (xn_new - xn).norm() < tol:
             xn = xn_new
@@ -64,12 +64,12 @@ if st.button("Find Minima"):
             st.subheader("Iteration Steps")
             for step, xn, f_x, grad_values, hessian_values in steps:
                 st.write(f"Step {step}:")
-                st.write(f"  1. x = {xn}")
+                st.write(f"  1. x = {xn.applyfunc(lambda v: round(v, 4))}")
                 st.write(f"  2. f(x) = {f_x}")
                 st.write(f"  3. Gradient = {grad_values}")
                 st.write(f"  4. Hessian = {hessian_values}")
                 st.write("-----------------------------------")
             
-            st.success(f"Estimated Minima at x = {minima}")
+            st.success(f"Estimated Minima at x = {minima.applyfunc(lambda v: round(v, 4))}")
     except Exception as e:
         st.error(f"Error: {e}")
