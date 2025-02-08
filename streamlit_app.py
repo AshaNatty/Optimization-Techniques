@@ -15,8 +15,12 @@ def newton_minima_multivariable(f_expr, vars, x0, tol):
     
     st.write("2️⃣ Hessian Matrix:")
     st.write("The Hessian matrix (H) represents the second derivatives of f(x,y):")
-    st.write("H = [ ∂²f/∂x²   ∂²f/∂x∂y ")
-    st.write("      ∂²f/∂y∂x   ∂²f/∂y² ]")
+    st.latex(r"""
+    H = \begin{bmatrix}
+    \frac{\partial^2 f}{\partial x^2} & \frac{\partial^2 f}{\partial x \partial y} \\
+    \frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2}
+    \end{bmatrix}
+    """)
     st.write(f"Hessian Matrix Formula: H = {hessian}")
     
     step = 0
